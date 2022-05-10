@@ -1,0 +1,162 @@
+#!/bin/bash
+#
+#####################################
+#    WordPress User Enumeration     #
+#         \ wpuserenum /            #
+#   ShadowVMX (aka) Juanma Coello   #
+#####################################
+#
+#
+
+
+
+
+if [[ -z $1 ]] ; then
+	echo "$(tput setaf 3) "
+	figlet wpuserenum
+	echo "         ___________________________________________________________ "
+	echo "        |       https://github.com/ShadowVMX?tab=repositories       |"
+	echo "        |                         @Sh4d0wVMX                        |" 
+	echo "        |https://www.linkedin.com/in/juanma-coello-romero-757280226/|"
+	echo "        |___________________________________________________________|"
+	echo " "
+	echo "$(tput setaf 4) "
+	echo "wpuserenum --url https://www.whatever.com --aggresive"
+	echo " "
+	echo "wpuserenum --url https://www.whatever.com --passive"
+	echo " "
+	exit
+fi
+
+
+if [[ $3 == "--passive" ]] ; then
+
+cat users.txt &> /dev/null
+
+if [[ $? == 1 ]] ; then
+	echo " "
+	echo "[!]Necesito el archivo users.txt.[!]"
+	echo " "
+	exit
+fi
+
+
+possibly=0
+
+echo " "
+curl -s -o /dev/null -w "%{http_code}\n" "$2/wp-admin" | grep "301" &> /dev/null
+
+
+if [[ $? == 0 ]] ; then
+hst=`echo $2 | cut -d"." -f"2,3"`
+
+kls=`ping -c 1 $hst | grep -oP '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort -u`
+
+echo " "
+echo "[+]$(tput setaf 3)URL $2  $(tput setaf 1)[$kls]"
+echo " "
+
+echo " "
+echo "$(tput setaf 4)[Adv]Si sale todo con código 301 en --passive, prueba --aggresive."
+sleep 1
+echo ""
+echo "[+]$(tput setaf 4)Buscando usuarios válidos ..."
+else
+echo " "
+echo "$(tput setaf 1)[*]No es una página WordPress."
+echo " "
+exit
+fi
+
+for i in `seq 10`
+do
+curl -s -o /dev/null -w "%{http_code}\n" "$2/?author=$i" | grep "301" &> /dev/null
+
+if [[ $? == 0 ]] ; then
+possibly=$(( $possibly + 1 ))
+fi
+done
+
+echo ""
+echo "$(tput setaf 1)[*]Se han encontrado $possibly posibles usuarios válidos. (Podrá fallar según validación de URL)."
+echo " "
+
+read -p "$(tput setaf 2)[+]Formato Largo o Corto(L/C)--> " format
+echo " "
+
+#Formato largo.
+
+if [[ $format == "L" ]] ; then
+
+for i in $(cat users.txt)
+do
+	echo -n "$(tput setaf 4)[*]$i --> " && curl -s -o /dev/null -w "%{http_code}\n" "$2/author/$i" 
+done
+fi
+
+#Formato corto.
+
+if [[ $format == "C" ]] ; then
+for i in $(cat users.txt)
+do
+	mks=`echo -n "[*]$i --> " && curl -s -o /dev/null -w "%{http_code}\n" "$2/author/$i"`
+	echo $mks | grep "301" &> /dev/null
+	if [[ $? == 1 ]] ; then
+	:
+	else
+        echo -n "$(tput setaf 4)[*]$i --> " && curl -s -o /dev/null -w "%{http_code}\n" "$2/author/$i" | grep --color "301"
+	fi
+done
+
+#Salida final
+
+fi
+fi
+
+
+#Aquí empieza el escaneo agresivo.
+
+if [[ $3 == "--aggresive" ]] ; then
+
+curl -s -o /dev/null -w "%{http_code}\n" "$2/wp-admin" | grep "301" &> /dev/null
+
+
+if [[ $? == 0 ]] ; then
+hst=`echo $2 | cut -d"." -f"2,3"`
+
+kls=`ping -c 1 $hst | grep -oP '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort -u`
+
+echo " "
+echo "[+]$(tput setaf 3)URL $2  $(tput setaf 1)[$kls]"
+echo " "
+
+else
+echo " "
+echo "$(tput setaf 1)[*]No es una página WordPress."
+echo " "
+exit
+fi
+
+
+
+echo " "
+echo "[+]$(tput setaf 4)Escaneo agresivo de usuarios, espere... (Puede tardar más de lo normal)"
+echo " "
+
+for i in $(seq 1 10);
+do
+	GET "$2/?author=$i"| egrep "author-".+ -o | cut -d" " -f1 | cut -d"-" -f2- | sed 's/">//g' | head -1 >> wpusers.txt
+done
+
+
+for i in $(cat wpusers.txt);
+do
+	echo "$(tput setaf 3)[+]Usuario --> $i"
+done
+
+rm wpusers.txt
+
+echo "$(tput setaf 2)" 
+echo "[+]Finalizado."
+echo " "
+fi
