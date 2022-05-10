@@ -1,0 +1,28 @@
+########################
+#Conociendo un poco más#
+########################
+
+Hemos realizado un escaneo y nada... ¿Y ahora qué?
+
+Bien, los JSON que se generan son bastante complicados y, a veces, algunas páginas suelen tener muy buena seguridad.
+
+--> He llevado a cabo un ataque de fuerza bruta de usuarios y me salen solo códigos 301.
+--> He llevado a cabo un escaneo agresivo y nada, no me salen usuarios pero, algo debe haber.
+
+_______________________________________________________________________________________________________________________
+
+
+¿Cuáles son las alternativas a partir de ahora?
+-----------------------------------------------
+
+~Nos toca hacerlo manualmente~
+
+1. Toma la URL --> https://www.estoesunaprueba.com
+2. Asegúrate antes de que es WordPress --> https://www.estoesunaprueba.com/wp-admin --> ¿SALE LOGIN? [V]
+3. Modificamos una ruta --> https://www.estoesunaprueba.com/?author=1
+4. Continuamos --> https://www.estoesunaprueba.com/?author=2
+5. Continúa hasta que la página te diga 404 not found, pero, en los authors te mostrará ella misma los nombres de los usuarios.
+
+~Nada más, ya tienes los logins para la FBruta con Burp, Hydra, etc...~
+
+#ShadowVMX --- Greetings.#
