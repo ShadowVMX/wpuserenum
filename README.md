@@ -22,9 +22,9 @@ Como vemos a continuación, el uso de esta herramienta es más que sencillo e in
 
 
 ## Reportes:
-  1. Se reporta fallo por setup.sh sin root, se arregla reporte por parte de @xDaNN1.
+  1. Se reporta fallo por setup.sh sin root, se arregla reporte por parte de **xDaNN1**.
   
-  2. Se reporta fallo {No es una página WordPress} --> Solucionado puesto que navegador devolvía por HTTP el código 406.
+  2. Se reporta fallo {No es una página WordPress} gracias al usuario **Aokiri** --> Solucionado puesto que navegador devolvía por HTTP el código 406.
   
       Código 406 --> El servidor no es capaz de devolver los datos en ninguno de los formatos aceptados por el cliente.
       
