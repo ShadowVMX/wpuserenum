@@ -21,6 +21,26 @@ Como vemos a continuación, el uso de esta herramienta es más que sencillo e in
   3. Por último, podrá ejecutar un escaneo totalmente agresivo para evitar la fuerza bruta.
 
 
+## Reportes:
+  1. Se reporta fallo por setup.sh sin root, se arregla reporte por parte de @xDaNN1.
+  
+  2. Se reporta fallo {No es una página WordPress} --> Solucionado puesto que navegador devolvía por HTTP el código 406.
+  
+      Código 406 --> El servidor no es capaz de devolver los datos en ninguno de los formatos aceptados por el cliente.
+      
+ ## Mejoras:
+  
+  Después del reporte y arreglos, hemos aumentado el rendimiento de la misma en diversos casos y se ha disminuído para otros.
+  
+  Por otro lado, se ha comparado el tiempo de ejecución en segundos entre wpuserenum y wpscan con un resultado increíble.
+  
+  A parte, en ciertos reportes, WPScan era incapaz de generar output puesto que la página daba errores mientras que wpuserenum se ha saltado el filtro sin   problemas.
+  
+  ## Futuro
+  
+  Cuando hay páginas con altísima seguridad no se reportan usuarios pero, se está trabajando en ello para poder obtener el listado lo antes posible.
+
+
 ## Cualquier problema y/o dudas
 
 gmail --> Juanmacoello94@gmail.com
