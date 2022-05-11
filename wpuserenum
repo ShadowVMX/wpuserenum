@@ -44,8 +44,8 @@ fi
 possibly=0
 
 echo " "
-curl -s -o /dev/null -w "%{http_code}\n" "$2/wp-admin" | grep "301" &> /dev/null
 
+GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-admin" -s | head -1  | grep 200 &> /dev/null
 
 if [[ $? == 0 ]] ; then
 hst=`echo $2 | cut -d"." -f"2,3"`
@@ -68,8 +68,21 @@ echo " "
 exit
 fi
 
+var=`curl -s -o /dev/null -w "%{http_code}\n" "$2/?author=1"` &> /dev/null
+
+if [[ $var == 406 ]] ; then
+        echo " "
+        echo "[*]El servidor no es capaz de devolver los datos en ninguno de los formatos aceptados por el cliente. $(tput setaf 1)[!]CUIDADO[!]"
+        echo "$(tput setaf 4) "
+        echo "[!]USE MODO AGRESIVO O NO DETECTARÁ NI PODRÁ SACAR USUARIOS.[!]"
+        echo "" 
+exit
+fi
+
+
 for i in `seq 10`
 do
+
 curl -s -o /dev/null -w "%{http_code}\n" "$2/?author=$i" | grep "301" &> /dev/null
 
 if [[ $? == 0 ]] ; then
@@ -118,8 +131,7 @@ fi
 
 if [[ $3 == "--aggresive" ]] ; then
 
-curl -s -o /dev/null -w "%{http_code}\n" "$2/wp-admin" | grep "301" &> /dev/null
-
+GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-admin" -s | head -1  | grep 200 &> /dev/null
 
 if [[ $? == 0 ]] ; then
 hst=`echo $2 | cut -d"." -f"2,3"`
@@ -142,21 +154,45 @@ fi
 echo " "
 echo "[+]$(tput setaf 4)Escaneo agresivo de usuarios, espere... (Puede tardar más de lo normal)"
 echo " "
-
-for i in $(seq 1 10);
+echo "$(tput setaf 7)BruteForcing /authors"
+echo " "
+for i in $(seq 1 5);
 do
-	GET "$2/?author=$i"| egrep "author-".+ -o | cut -d" " -f1 | cut -d"-" -f2- | sed 's/">//g' | head -1 >> wpusers.txt
+	if [[ $i == 1 ]] ; then
+		echo -n "[#########"
+		fi
+	if [[ $i == 2 ]] ; then
+		echo -n "######################"
+		fi
+	if [[ $i == 3 ]] ; then
+                echo -n "#####"
+                fi
+        if [[ $i == 4 ]] ; then
+                echo -n "#############################" 
+                fi
+        if [[ $i == 5 ]] ; then
+                echo -n "#####]" 
+                fi
+
+	#GET "$2/?author=$i"| egrep "author-".+ -o | cut -d" " -f1 | cut -d"-" -f2- | sed 's/">//g' | head -1 >> wpusers.txt
+	GET "User-Agent: User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/?author=$i" | egrep "author-".+ -o | cut -d" " -f1 | cut -d"-" -f2- | sed 's/">//g' | head -1 >> wpusers.txt
+	GET -H "User-Agent: User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/?author=$i" | egrep "author-".+ -o | cut -d" " -f1 | cut -d"-" -f2- | sed 's/">//g' | head -1 >> wpusers.txt
+
 done
 
+echo "" 
+echo "" 
 
-for i in $(cat wpusers.txt);
+for i in $(cat wpusers.txt | sort -u);
 do
 	echo "$(tput setaf 3)[+]Usuario --> $i"
 done
 
-rm wpusers.txt
+rm wpusers.txt &> /dev/null
 
 echo "$(tput setaf 2)" 
 echo "[+]Finalizado."
+echo " "
+echo "$(tput setaf 1)[*]$(tput setaf 5)Si no se han reportado usuarios --> [Seguridad mejorada], se está trabajando en esta sección."
 echo " "
 fi
