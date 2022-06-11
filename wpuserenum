@@ -45,7 +45,7 @@ possibly=0
 
 echo " "
 
-GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-admin" -s | head -1  | grep 200 &> /dev/null
+GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-content" -s | head -1  | grep 200 &> /dev/null
 
 if [[ $? == 0 ]] ; then
 hst=`echo $2 | cut -d"." -f"2,3"`
@@ -131,7 +131,7 @@ fi
 
 if [[ $3 == "--aggresive" ]] ; then
 
-GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-admin" -s | head -1  | grep 200 &> /dev/null
+GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-content" -s | head -1  | grep 200 &> /dev/null
 
 if [[ $? == 0 ]] ; then
 hst=`echo $2 | cut -d"." -f"2,3"`
@@ -193,6 +193,6 @@ rm wpusers.txt &> /dev/null
 echo "$(tput setaf 2)" 
 echo "[+]Finalizado."
 echo " "
-echo "$(tput setaf 1)[*]$(tput setaf 5)Si no se han reportado usuarios --> [Seguridad mejorada], se está trabajando en esta sección."
+echo "$(tput setaf 1)[*]$(tput setaf 5)Si no se han reportado usuarios --> [WordFence Security (FireWall)], se está trabajando en esta sección."
 echo " "
 fi
