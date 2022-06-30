@@ -196,3 +196,4 @@ echo " "
 echo "$(tput setaf 1)[*]$(tput setaf 5)Si no se han reportado usuarios --> [WordFence Security (FireWall)], se está trabajando en esta sección."
 echo " "
 fi
+
