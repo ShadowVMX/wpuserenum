@@ -6,7 +6,7 @@ if [ $EUID -ne 0 ]; then
 	exit 1
 fi
 
-tools=(curl figlet)
+tools=(curl figlet wpscan)
 
 echo " "
 echo "$(tput setaf 3)[+] Instalaremos: curl, figlet y wpuserenum (en su sistema)."
