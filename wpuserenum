@@ -25,6 +25,8 @@ if [[ -z $1 ]] ; then
 	echo " "
 	echo "wpuserenum --url https://www.whatever.com --passive"
 	echo " "
+	echo "wpuserenum --url https://www.whatever.com --wpscan"
+	echo " "
 	exit
 fi
 
@@ -40,6 +42,16 @@ if [[ $? == 1 ]] ; then
 	exit
 fi
 
+if [[ -s users.txt ]] ; then
+	echo " "
+	echo "$(tput setaf 6)[$(tput setaf 1)*$(tput setaf 6)]$(tput setaf 3)Archivo users.txt contiene datos."
+else
+	echo " "
+	echo "$(tput setaf 6)[$(tput setaf 1)*$(tput setaf 6)]$(tput setaf 3)Archivo users.txt vacío, saliendo..."
+	echo " "
+	sleep 1.5
+	exit
+fi
 
 possibly=0
 
@@ -131,7 +143,7 @@ fi
 
 if [[ $3 == "--aggresive" ]] ; then
 
-GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-content" -s | head -1  | grep 200 &> /dev/null
+GET -H "User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1" "$2/wp-admin" -s | head -1  | grep 200 &> /dev/null
 
 if [[ $? == 0 ]] ; then
 hst=`echo $2 | cut -d"." -f"2,3"`
@@ -197,3 +209,9 @@ echo "$(tput setaf 1)[*]$(tput setaf 5)Si no se han reportado usuarios --> [Word
 echo " "
 fi
 
+
+if [[ $3 == "--wpscan" ]] ; then
+	echo " "
+	wpscan --url $2 --enumerate u
+	echo " "
+fi
