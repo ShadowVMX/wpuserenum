@@ -1,4 +1,4 @@
-# wpuserenum v1.2
+# wpuserenum v1.3
 
 
 ![wordpress-hacked](https://user-images.githubusercontent.com/92258683/167696553-010ed3c2-d533-4979-91ee-0607e97320e0.jpg)
@@ -18,7 +18,9 @@ Como vemos a continuación, el uso de esta herramienta es más que sencillo e in
   
   2. Se le proporciona el archivo user.txt, el cual es más que necesario para llevar a cabo el BForce a través del escaneo pasivo.
 
-  3. Por último, podrá ejecutar un escaneo totalmente agresivo para evitar la fuerza bruta.
+  3. Podrá ejecutar un escaneo totalmente agresivo para evitar la fuerza bruta.
+  
+  4. Por último, tendrá una opción final para que en caso negativo de análisis, use wpscan de forma automática.
 
 
 ## Reportes:
